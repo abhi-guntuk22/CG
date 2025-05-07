@@ -33,26 +33,25 @@ void ddaAlgorithm(int x1, int y1, int x2, int y2, int LineType) {
         if (LineType == 1) { // simple
             glVertex2i(round(x), round(y));
         } else if (LineType == 2) { // dashed
-            if (i % 5 == 0)
+            if (i % 10 <5)
                 glVertex2i(round(x), round(y));
         } else if (LineType == 3) { // dotted
             if (i % 10 == 0)
                 glVertex2i(round(x), round(y));
         } else if (LineType == 4) { // dashed-dotted
-            int patternLength = 20;
-            int dashLength = 5;
-            int dotPosition = 12;
-            int mod = i % patternLength;
-            if (mod < dashLength || mod == dotPosition)
+           if(i%10<5 || i%10==7){
                 glVertex2i(round(x), round(y));
         }
+    }
         x += DX;
         y += DY;
-    }
+  }
     glEnd();
     glFlush();
-}
+    
 
+
+}
 void axis() {
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINES);
