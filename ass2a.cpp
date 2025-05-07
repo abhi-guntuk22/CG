@@ -6,6 +6,11 @@ using namespace std;
 int wl = 1200;
 int wh = 700;
 
+// Helper sign function
+int sign(float x) {
+    return (x > 0) - (x < 0); // returns 1 if x > 0, -1 if x < 0, 0 if x == 0
+}
+
 void myInit(void) {
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glColor3i(0, 0, 0);
@@ -25,33 +30,31 @@ void ddaAlgorithm(int x1, int y1, int x2, int y2, int LineType) {
 
     float DX = dx / float(l);
     float DY = dy / float(l);
-    float x = x1;
-    float y = y1;
+
+    float x = x1 + 0.5 * sign(DX);
+    float y = y1 + 0.5 * sign(DY);
 
     glBegin(GL_POINTS);
     for (int i = 0; i <= l; i++) {
         if (LineType == 1) { // simple
             glVertex2i(round(x), round(y));
         } else if (LineType == 2) { // dashed
-            if (i % 10 <5)
+            if (i % 10 < 5)
                 glVertex2i(round(x), round(y));
         } else if (LineType == 3) { // dotted
             if (i % 10 == 0)
                 glVertex2i(round(x), round(y));
         } else if (LineType == 4) { // dashed-dotted
-           if(i%10<5 || i%10==7){
+            if (i % 10 < 5 || i % 10 == 7)
                 glVertex2i(round(x), round(y));
         }
-    }
         x += DX;
         y += DY;
-  }
+    }
     glEnd();
     glFlush();
-    
-
-
 }
+
 void axis() {
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINES);
@@ -64,7 +67,6 @@ void axis() {
 
 void shape() {
     int s = 4; // scale factor
-
     ddaAlgorithm(50 * s, 50 * s, 150 * s, 50 * s, 1);
     ddaAlgorithm(150 * s, 50 * s, 140 * s, 30 * s, 1);
     ddaAlgorithm(140 * s, 30 * s, 60 * s, 30 * s, 1);
@@ -74,7 +76,6 @@ void shape() {
     ddaAlgorithm(115 * s, 90 * s, 100 * s, 50 * s, 1);
 }
 
-
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     axis(); // Draw axis after clearing screen
@@ -83,20 +84,14 @@ void display() {
 
 void menu(int index) {
     switch (index) {
-        case 1:
-            ddaAlgorithm(100, 100, 200, 400, 1); break; // Simple
-        case 2:
-            ddaAlgorithm(-50, -50, -300, -300, 2); break; // Dashed
-        case 3:
-            ddaAlgorithm(100, -150, 400, -500, 3); break; // Dotted
-        case 4:
-            ddaAlgorithm(-50, 50, -400, 400, 4); break; // Dashed-dotted
-        case 5:
-            shape(); break;
-        case 6:
-            axis(); break;
+        case 1: ddaAlgorithm(100, 100, 200, 400, 1); break;
+        case 2: ddaAlgorithm(-50, -50, -300, -300, 2); break;
+        case 3: ddaAlgorithm(100, -150, 400, -500, 3); break;
+        case 4: ddaAlgorithm(-50, 50, -400, 400, 4); break;
+        case 5: shape(); break;
+        case 6: axis(); break;
     }
-    glFlush(); // Ensure drawing updates
+    glFlush();
 }
 
 int main(int c, char** v) {
@@ -115,7 +110,7 @@ int main(int c, char** v) {
     glutAddMenuEntry("Dotted line", 3);
     glutAddMenuEntry("Dashed-Dotted line", 4);
     glutAddMenuEntry("Boat shape", 5);
- 
+
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 
     glutMainLoop();
